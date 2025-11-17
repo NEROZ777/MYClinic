@@ -8,5 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/patient/add_patient', [PatientController::class, 'AddPatient']);
 Route::post('/patient/delete_patient', [PatientController::class, 'DeletePatient']);
 Route::post('/patient/edit_patient', [PatientController::class, 'EditPatient']);
+Route::get('/patient/get_patient', [PatientController::class, 'GetPatient']);
 Route::get('/patient/get_patients', [PatientController::class, 'GetPatients']);
+Route::get('patient/search_patient', [PatientController::class, 'SearchPatient']);
 //_____________________________________//

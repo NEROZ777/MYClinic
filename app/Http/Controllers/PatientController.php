@@ -174,4 +174,74 @@ class PatientController extends Controller
             ], 400);
         }
     }
+
+    public function GetPatient (Request $request) {
+        $validatedData = $request->validate([
+            'id' => 'required'
+        ]);
+
+        if (!$validatedData) {
+            return response()->json([
+                'message' => 'PATIENT HAS NOT FOUND, ID REQUIRED'
+            ], 400);
+        }
+
+        try {
+            $response = DB::transaction(function () use ($validatedData) {
+                $patient = Patient::where('id', $validatedData['id'])->first();
+
+                if (!$patient) {
+                    return response()->json([
+                        'message' => 'PATIEN HAS NOT FOUND'
+                    ], 400);
+                }
+
+                return response()->json([
+                    'patient' => $patient
+                ]);
+            });
+
+            return $response;
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'PATIENT HAS NOT FOUND',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function SearchPatient (Request $request) {
+        $validatedData = $request->validate([
+            'name' => 'required'
+        ]);
+
+        if (!$validatedData) {
+            return response()->json([
+                'message' => 'NO PATIENTS HAS FOUND'
+            ], 400);
+        }
+
+        try {
+            $response = DB::transaction(function () use ($validatedData) {
+                $patients = Patient::where('full_name', 'LIKE', '%' . $validatedData['name'] . '%')->get();
+
+                if (!$patients) {
+                    return response()->json([
+                        'message' => 'NO PATIENT HAS FOUND'
+                    ], 400);
+                }
+
+                return response()->json([
+                    'patients' => $patients
+                ], 200);
+            });
+
+            return $response;
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'NO PATIENTS HAS FOUND',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
 }
