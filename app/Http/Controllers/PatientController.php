@@ -22,7 +22,10 @@ class PatientController extends Controller
 
         if (!$validatedData) {
             return response()->json([
-                'message' => 'MISSING DATA'
+                'success' => false,
+                'message' => 'Error Occurred',
+                'error' => 'missing data',
+                'status_code' => 400
             ], 400);
         }
 
@@ -32,8 +35,11 @@ class PatientController extends Controller
                 $name = Patient::where('full_name', $fullName)->first();
                 if ($name) {
                     return response()->json([
-                        'message' => 'THIS USER IS ALREADY EXIST'
-                    ], 400);
+                        'success' => false,
+                        'message' => 'Error Occurred',
+                        'error' => 'This patient is already exist',
+                        'status_code' => 400
+                    ]);
                 }
                 $user = Patient::create([
                     'full_name' => $fullName,
@@ -41,24 +47,27 @@ class PatientController extends Controller
                 ]);
                 if (!$user) {
                     return response()->json([
-                        'message' => 'USER HAS NOT CREATED'
-                    ], 400);
+                        'success' => false,
+                        'message' => 'Error Occurred',
+                        'error' => 'Patient has not added',
+                        'status_code' => 400
+                    ]);
                 }
                 return response()->json([
-                    'message' => 'USER HAS BEEN CREATED',
-                    'user' => [
-                        'id' => $user->id,
-                        'full_name' => $user->full_name,
-                        'born_date' => $user->born_date
-                    ]
-                ], 200);
+                    'success' => true,
+                    'message' => 'Patient has added successfully',
+                    'data' => $user,
+                    'status_code' => 200
+                ]);
             });
 
             return $response;
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'USER HAS NOT CREATED',
-                'error' => $e->getMessage()
+                'success' => false,
+                'message' => 'Patient',
+                'error' => $e->getMessage(),
+                'status_code' => 200
             ], 400);
         }
     }

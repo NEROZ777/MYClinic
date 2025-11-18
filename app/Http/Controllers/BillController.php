@@ -17,8 +17,11 @@ class BillController extends Controller
 
         if (!$validatedData) {
             return response()->json([
-                'message' => 'BILL HAS NOT ADDED, ID AND COST REQUIRED'
-            ], 400);
+                'success' => false,
+                'message' => 'Error Occurred',
+                'error' => 'Patient id and cost required',
+                'status_code' => 400
+            ]);
         }
 
         try {
@@ -27,7 +30,10 @@ class BillController extends Controller
 
                 if (!$patient) {
                     return response()->json([
-                        'message' => 'BILL HAS NOT ADDED, PATIENT HAS NOT FOUND'
+                        'success' => false,
+                        'message' => 'Error Occurred',
+                        'error' => 'Patient has not found',
+                        'status_code' => 400
                     ]);
                 }
 
@@ -39,20 +45,28 @@ class BillController extends Controller
 
                 if (!$bill) {
                     return response()->json([
-                        'message' => 'BILL HAS NOT ADDED'
-                    ], 400);
+                        'success' => false,
+                        'message' => 'Error Occurred',
+                        'data' => $bill,
+                        'status_code' => 200
+                    ]);
                 }
 
                 return response()->json([
-                    'bill' => $bill
+                    'success' => true,
+                    'message' => 'Bill has added succefully',
+                    'error' => 'Patient id and cost required',
+                    'status_code' => 400
                 ], 200);
             });
 
             return $response;
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'BILL HAS NOT ADDED',
-                'error' => $e->getMessage()
+                'success' => false,
+                'message' => 'Error Occurred',
+                'error' => $e->getMessage(),
+                'status_code' => 400
             ]);
         }
     }
