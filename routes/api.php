@@ -17,4 +17,6 @@ Route::get('patient/search_patient', [PatientController::class, 'SearchPatient']
 
 //__________/// BILL APIS ///__________//
 Route::post('bill/add_bill', [BillController::class, 'AddBill']);
+Route::post('bill/edit_bill', [BillController::class, 'EditBill']);
+Route::post('bill/set_bill_paid', [BillController::class, 'SetBillPaid']);
 //_____________________________________//

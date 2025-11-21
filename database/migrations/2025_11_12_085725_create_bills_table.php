@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
             $table->float('cost');
             $table->float('paid');
+            $table->boolean('finished')->default(false);
             $table->timestamps();
         });
     }
